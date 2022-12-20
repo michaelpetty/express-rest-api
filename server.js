@@ -1,4 +1,6 @@
 const express = require('express')
+// connect to mongodb
+require('./models')
 const todoController = require('./controllers/todoController')
 const PORT = process.env.PORT || 4000
 const app = express()
