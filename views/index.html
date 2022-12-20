@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Express REST API</title>
+</head>
+<body>
+    <header>
+        <h1>Express REST API</h1>
+    </header>
+    <main>
+        <h2>Resource Endpoints</h2>
+        <section>
+            <h3>TODOs</h3>
+            <p><strong>Show all TODOs</strong></p>
+            <pre><a href="/api/v1/todos"></a></pre>
+            <p>Example response:</p>
+            <pre>
+                <code>[
+                    {
+                        "_id": 1,
+                        "body": "bake a pie",
+                        "completed": false
+                    },
+                    {
+                        "_id": 2,
+                        "body": "wash dishes",
+                        "completed": false
+                    },
+                    {
+                        "_id": 3,
+                        "body": "walk the dog",
+                        "completed": true
+                    },
+                ]
+                </code>
+            </pre>
+            <p><strong>Show Detail TODO</strong></p>
+            <pre><a href="/api/v1/todos/1"></a></pre>
+            <p>Example response:</p>
+            <pre>
+                <code>
+                    {
+                        "_id": 1,
+                        "body": "bake a pie",
+                        "completed": false
+                    }
+                </code>
+            </pre>
+        </section>
+    </main>
+    <footer>Michael Petty &copy; <script>document.write(new Date().getFullYear())</script></footer>
+</body>
+</html>
