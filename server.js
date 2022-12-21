@@ -8,6 +8,9 @@ const app = express()
 //------- MIDDLEWARE -----------//
 app.use(express.static(`${__dirname}/public`))
 
+// parse json in req
+app.use(express.json())
+
 //------- HTML ENDPOINT ---------//
 app.get('/', (req, res) => {
     res.sendFile('views/index.html', {
