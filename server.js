@@ -1,6 +1,7 @@
 const express = require('express')
 // connect to mongodb
 require('./models')
+const cors = require('cors')
 const todoController = require('./controllers/todoController')
 const PORT = process.env.PORT || 4000
 const app = express()
@@ -10,6 +11,9 @@ app.use(express.static(`${__dirname}/public`))
 
 // parse json in req
 app.use(express.json())
+
+// enable all req for now
+app.use(cors())
 
 //------- HTML ENDPOINT ---------//
 app.get('/', (req, res) => {
