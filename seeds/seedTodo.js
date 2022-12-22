@@ -1,3 +1,4 @@
+require('dotenv').config()
 require('../models')
 const Todo = require('../models/todo')
 

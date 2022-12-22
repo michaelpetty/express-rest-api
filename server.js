@@ -1,4 +1,6 @@
 const express = require('express')
+require('dotenv').config()
+
 // connect to mongodb
 require('./models')
 const cors = require('cors')
