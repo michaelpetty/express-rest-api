@@ -1,4 +1,6 @@
 const express = require('express')
+const https = require('https')
+const fs = require('fs')
 require('dotenv').config()
 
 // connect to mongodb
@@ -28,5 +30,14 @@ app.get('/', (req, res) => {
 app.use('/api/v1/todos', todoController)
 
 //------- PRODUCT API ENDPOINT ---------//
-
-app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
+// use https if FORCE_HTTPS or on production
+if (process.env.FORCE_HTTPS || process.env.NODE_ENV === 'production') {
+    // create https server and listen
+    const httpsServer = https.createServer({
+        key: fs.readFileSync(process.env.HTTPS_KEY_FILE),
+        cert: fs.readFileSync(process.env.HTTPS_CERT_FILE)
+    }, app)
+    httpsServer.listen(PORT, () => console.log(`HTTPS server running on port: ${PORT}`))
+} else {
+    app.listen(PORT, () => console.log(`HTTP server running on port: ${PORT}`))
+}
