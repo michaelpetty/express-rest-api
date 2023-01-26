@@ -4,9 +4,11 @@ const fs = require('fs')
 require('dotenv').config()
 
 // connect to mongodb
-require('./models')
+require('./models/mongo')
 const cors = require('cors')
 const todoController = require('./controllers/todoController')
+const productController = require('./controllers/productController')
+
 const PORT = process.env.PORT || 4000
 const app = express()
 
@@ -30,6 +32,8 @@ app.get('/', (req, res) => {
 app.use('/api/v1/todos', todoController)
 
 //------- PRODUCT API ENDPOINT ---------//
+app.use('/api/v1/products', productController)
+
 // use https if FORCE_HTTPS or on production
 if (process.env.FORCE_HTTPS || process.env.NODE_ENV === 'production') {
     // create https server and listen

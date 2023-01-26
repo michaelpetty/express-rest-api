@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Todo = require('../models/todo')
+const Todo = require('../models/mongo/todo')
 
 // CRUD for todos
 
