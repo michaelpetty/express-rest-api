@@ -1,6 +1,5 @@
-const express = require('express')
-const router = express.Router()
 // require models
+const { Product } = require('../models/sql')
 
 const tmpProducts = [
     {
@@ -19,19 +18,22 @@ const tmpProducts = [
         descr: 'some weird prduct'
     },
 ]
-// CRUD for products
-// Index - display all products
-router.get('/', (req, res) => {
-    res.json(tmpProducts)
-})
 
-// Create product
-
-// Show - one product
-
-// Update one product
-
-// Delete one product
-
-
-module.exports = router
+module.exports = {
+    create: async (req, res) => {
+        if (Array.isArray(req.body)) {
+            const newProducts = await Product.bulkCreate(req.body)
+            return res.json(newProducts)
+        } else {
+            const newProduct = await Product.create(req.body)
+            return res.json(newProduct)
+        }
+    },
+    findAll: async (req, res) => {
+        const products = await Product.findAll()
+        return res.json(products)
+    },
+    findOne: async (req, res) => {},
+    updateOne: async (req, res) => {},
+    deleteOne: async (req, res) => {},
+}
