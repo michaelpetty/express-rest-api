@@ -29,10 +29,12 @@ router.get('/', productCtl.findAll)
 router.post('/', productCtl.create)
 
 // Show - one product
+router.get('/:id', productCtl.findById)
 
 // Update one product
+router.put('/:id', productCtl.updateOne)
 
 // Delete one product
-
+router.delete('/:id', productCtl.deleteOne)
 
 module.exports = router

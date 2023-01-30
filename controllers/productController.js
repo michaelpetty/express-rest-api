@@ -33,7 +33,23 @@ module.exports = {
         const products = await Product.findAll()
         return res.json(products)
     },
-    findOne: async (req, res) => {},
-    updateOne: async (req, res) => {},
-    deleteOne: async (req, res) => {},
+    findById: async (req, res) => {
+        try {
+            const product = await Product.findByPk(req.params.id)
+            return res.json((product)? product: {message: 'Product not found'}) 
+        } catch (error) {
+            return res.json({message: error})
+        }
+    },
+    updateOne: async (req, res) => {
+        const [rowCount, updatedProduct] = await Product.update(req.body, {
+            where: {id: req.params.id},
+            returning: true
+        })
+        return res.json(updatedProduct[0])
+    },
+    deleteOne: async (req, res) => {
+        const deleted = await Product.destroy({where: {id: req.params.id}})
+        return res.json({deleted})
+    }
 }

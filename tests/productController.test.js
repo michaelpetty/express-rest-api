@@ -52,7 +52,28 @@ describe('Product Controller routes', () => {
         expect(results).toHaveLength(tmpProducts.length)
         expect(results[2].name).toBe('prod3')
     })
-    it.todo('should get one specific product')
-    it.todo('should update one specific product')
-    it.todo('should delete one specific product')
+    it('should get one specific product', async () => {
+        const testProducts = await productCtl.create(mockRequest(tmpProducts), mockResponse())
+        const product = await productCtl.findById(mockRequest({}, {id: testProducts[1].id}), mockResponse())
+        expect(product.name).toBe('prod2')
+        expect(product.descr).toHaveLength(17)
+    })
+    it('should update one specific product', async () => {
+        const testProducts = await productCtl.create(mockRequest(tmpProducts), mockResponse())
+        const {dataValues: updatedProduct} = await productCtl.updateOne(mockRequest({
+            name: 'new Product 1'
+        }, {id: testProducts[0].id}), mockResponse())
+        expect(updatedProduct.id).toBe(testProducts[0].id)
+        expect(updatedProduct.name).toBe('new Product 1')
+        expect(updatedProduct.descr).toBe(testProducts[0].descr)
+    })
+    it('should delete one specific product', async () => {
+        const testProducts = await productCtl.create(mockRequest(tmpProducts), mockResponse())
+        const {deleted: deletedCount} = await productCtl.deleteOne(mockRequest({}, {id: testProducts[2].id}), mockResponse())
+        const productsAfterDelete = await productCtl.findAll(mockRequest(), mockResponse())
+        expect(deletedCount).toBe(1)
+        expect(productsAfterDelete).toHaveLength(2)
+        const reqDeletedProduct = await productCtl.findById(mockRequest({}, {id: testProducts[2].id}), mockResponse())
+        expect(reqDeletedProduct.message).toBe('Product not found')
+    })
 })
