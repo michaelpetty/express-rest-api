@@ -1,6 +1,6 @@
 require('dotenv').config()
-require('../models')
-const Todo = require('../models/todo')
+require('../models/mongo')
+const Todo = require('../models/mongo/todo')
 
 const todos = [
     {
