@@ -1,5 +1,6 @@
 // require models
 const { Product } = require('../models/sql')
+const { Op } = require('sequelize')
 
 const tmpProducts = [
     {
@@ -40,6 +41,16 @@ module.exports = {
         } catch (error) {
             return res.json({message: error})
         }
+    },
+    searchByTitle: async (req, res) => {
+        const results = await Product.findAll({
+            where: {name: {
+                [Op.iLike]: `%${req.query.title}%`
+            }},
+            attributes: [['name', 'title'], ['descr', 'description'], ['id', 'prodid']],
+            limit: 5
+        })
+        return res.json(results)
     },
     updateOne: async (req, res) => {
         const [rowCount, updatedProduct] = await Product.update(req.body, {
