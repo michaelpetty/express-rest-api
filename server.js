@@ -1,7 +1,7 @@
 const express = require('express')
 const https = require('https')
 const fs = require('fs')
-require('dotenv').config()
+require('./config/getEnv')
 
 // connect to mongodb
 require('./models/mongo')

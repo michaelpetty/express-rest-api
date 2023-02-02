@@ -1,5 +1,4 @@
-// eventually connect to test db
-require('dotenv').config()
+require('../config/getEnv')
 const db = require('../models/sql')
 const productCtl = require('../controllers/productController')
 
@@ -7,8 +6,8 @@ beforeAll(async () => await db.sequelize.sync({force: true}))
 afterEach(async () => await db.Product.sync({force: true}))
 afterAll(async () => await db.sequelize.close())
 
-const mockRequest = (body, params) => {
-    return {body, params}
+const mockRequest = (body, params, query) => {
+    return {body, params, query}
 }
 
 const mockResponse = () => {
@@ -21,15 +20,15 @@ const mockResponse = () => {
 // mock data
 const tmpProducts = [
     {
-        name: 'prod1',
+        name: 'apple',
         descr: 'some cool prduct'
     },
     {
-        name: 'prod2',
+        name: 'banana',
         descr: 'some nifty prduct'
     },
     {
-        name: 'prod3',
+        name: 'orange',
         descr: 'some weird prduct'
     },
 ]
@@ -38,25 +37,36 @@ describe('Product Controller routes', () => {
     it('should create a new product', async () => {
         const newProduct = await productCtl.create(mockRequest(tmpProducts[0]), mockResponse())
         expect(newProduct.id).toBeDefined()
-        expect(newProduct.name).toBe('prod1')
+        expect(newProduct).toHaveProperty('name', tmpProducts[0].name)
     })
     it('should create multiple products if array', async () => {
         const newProducts = await productCtl.create(mockRequest(tmpProducts), mockResponse())
         expect(newProducts).toHaveLength(tmpProducts.length)
         expect(newProducts[0].id).not.toBe(newProducts[1].id)
-        expect(newProducts[1].name).toBe('prod2')
+        expect(newProducts[1]).toHaveProperty('name', tmpProducts[1].name)
     })
     it('should return all products', async () => {
         const testProducts = await productCtl.create(mockRequest(tmpProducts), mockResponse())
         const results = await productCtl.findAll(mockRequest(), mockResponse())
         expect(results).toHaveLength(tmpProducts.length)
-        expect(results[2].name).toBe('prod3')
+        expect(results[2]).toHaveProperty('name', tmpProducts[2].name)
     })
     it('should get one specific product', async () => {
         const testProducts = await productCtl.create(mockRequest(tmpProducts), mockResponse())
         const product = await productCtl.findById(mockRequest({}, {id: testProducts[1].id}), mockResponse())
-        expect(product.name).toBe('prod2')
-        expect(product.descr).toHaveLength(17)
+        expect(product).toHaveProperty('name', testProducts[1].name)
+        expect(product.descr).toHaveLength(testProducts[1].descr.length)
+    })
+    it('should find products by searching name/title', async () => {
+        const testProducts = await productCtl.create(mockRequest(tmpProducts), mockResponse())
+        const results = await productCtl.searchByTitle(mockRequest({}, {}, {title: 'an'}), mockResponse())
+        expect(results).toHaveLength(2)
+        expect(results).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({dataValues: expect.objectContaining({prodid: 2})}),
+              expect.objectContaining({dataValues: expect.objectContaining({prodid: 3})})
+            ])
+        )
     })
     it('should update one specific product', async () => {
         const testProducts = await productCtl.create(mockRequest(tmpProducts), mockResponse())

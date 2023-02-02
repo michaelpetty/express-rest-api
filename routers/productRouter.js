@@ -28,6 +28,9 @@ router.get('/', productCtl.findAll)
 // Create product(s)
 router.post('/', productCtl.create)
 
+// Search by product name
+router.get('/search', productCtl.searchByTitle)
+
 // Show - one product
 router.get('/:id', productCtl.findById)
 
