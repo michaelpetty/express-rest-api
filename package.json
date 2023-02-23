@@ -4,7 +4,7 @@
   "description": "Simple RESTful API for classroom projects needing a backend",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test jest --watch"
+    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles --watch"
   },
   "repository": {
     "type": "git",
