@@ -3,6 +3,7 @@ const router = express.Router()
 // require models
 // const {Product} = require('../models/sql')
 const productCtl = require('../controllers/productController')
+const orderRouter = require('./orderRouter')
 
 const tmpProducts = [
     {
@@ -27,6 +28,9 @@ router.get('/', productCtl.findAll)
 
 // Create product(s)
 router.post('/', productCtl.create)
+
+// routes for orders
+router.use('/orders', orderRouter)
 
 // Search by product name
 router.get('/search', productCtl.searchByTitle)

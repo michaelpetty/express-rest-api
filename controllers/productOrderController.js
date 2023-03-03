@@ -20,7 +20,9 @@ module.exports = {
         const order = await Order.findByPk(req.params.id, {
             include: [{
                 model: ProductOrder,
-                include: Product}]
+                include: Product
+            }],
+            order: [[ProductOrder, Product, 'name', 'ASC']]
         })
         return res.json(order)
     },
@@ -28,7 +30,7 @@ module.exports = {
         const [poResult, created] = await ProductOrder.findOrCreate({
             where: {
                 orderId: req.params.orderId,
-                productId: req.params.productId
+                productId: req.body.productId
             },
             defaults: req.body
         })
